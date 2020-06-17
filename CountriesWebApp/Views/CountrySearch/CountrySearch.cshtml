@@ -1,0 +1,76 @@
+﻿@model CountriesWebApp.Models.CountrySearchViewModel
+
+@{
+    ViewData["Title"] = "CountrySearch";
+}
+
+<h1>Country search</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CountrySearch">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SearchString" class="control-label"></label>
+                <input asp-for="SearchString" class="form-control" />
+                <span asp-validation-for="SearchString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+            @Html.ActionLink("Get all countries from database", "GetAllCountriesFromDb", "CountrySearch")
+        </form>
+    </div>
+
+    <table class="table table-striped text-black-50">
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Capital</th>
+            <th>Area</th>
+            <th>Population</th>
+            <th>Region</th>
+            <th></th>
+        </tr>
+
+        @if (Model.CountrySearchResults == null || Model.CountrySearchResults.Count <= 0)
+        {
+            <tr>
+                <td colSpan="7" align="center"><b>No results</b></td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var result in Model.CountrySearchResults)
+            {
+                <tr>
+                    <td>@result.CountryName</td>
+                    <td>@result.CountryCode</td>
+                    <td>@result.CapitalName</td>
+                    <td>@result.Area</td>
+                    <td>@result.Population</td>
+                    <td>@result.Region</td>
+                    <td>
+                        @using (Html.BeginForm("AddCountryToDb", "CountrySearch", new CountryViewModel
+                        {
+                            CountryName = result.CountryName,
+                            CountryCode = result.CountryCode,
+                            CapitalName = result.CapitalName,
+                            Area = result.Area,
+                            Population = result.Population,
+                            Region = result.Region
+                        }))
+                        {
+                            <input type="submit" value="Add to database" class="btn btn-secondary"/>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

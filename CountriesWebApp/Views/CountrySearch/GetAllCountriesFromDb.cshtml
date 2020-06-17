@@ -1,0 +1,42 @@
+﻿@model CountriesWebApp.Models.CountryListViewModel
+
+@{
+    ViewData["Title"] = "GetAllCountriesFromDb";
+}
+
+<h2>Get all countries from database</h2>
+
+<div>
+    <table class="table table-striped text-black-50">
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Capital</th>
+            <th>Area</th>
+            <th>Population</th>
+            <th>Region</th>
+            <th></th>
+        </tr>
+
+        @if (Model.Countries == null || Model.Countries.Count <= 0)
+        {
+            <tr>
+                <td colSpan="7" align="center"><b>There is no records in database</b></td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var result in Model.Countries)
+            {
+                <tr>
+                    <td>@result.CountryName</td>
+                    <td>@result.CountryCode</td>
+                    <td>@result.CapitalName</td>
+                    <td>@result.Area</td>
+                    <td>@result.Population</td>
+                    <td>@result.Region</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
